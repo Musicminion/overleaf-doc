@@ -1,0 +1,8 @@
+{
+  "label": "个人级部署",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "个人级部署让您在Windows PC或者Mac(含M1/M2系列)上部署仅供您自己使用的Overleaf。由于本地化部署之后，您将专人专享自己的Overleaf服务器，所以编译Latex文档的速度相比较公有云Overleaf，会有一定程度的提高。请根据您的操作系统，在这里选择你要部署的版本："
+  }
+}
