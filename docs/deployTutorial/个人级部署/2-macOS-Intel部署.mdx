@@ -1,4 +1,4 @@
-# macOS-Arm部署
+# macOS-Intel部署
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -6,31 +6,23 @@ import TabItem from '@theme/TabItem';
 ```
 
 :::caution 警告
-「macOS-Intel部署」适用于arm64架构的M1/M2 Mac。在运行macOS的macbook、macMini、iMac、Mac Studio、Mac Pro等上部署。请在部署前确认您的macOS的CPU为**M1/M2或更新版本**的CPU，而**不是Intel较老的芯片**。然后在继续进行按照本部分部署。
+「macOS-Intel部署」适用于x86_64的Intel Mac。在运行macOS的macbook、macMini、iMac、Mac Studio、Mac Pro等上部署。请在部署前确认您的macOS的CPU为**Intel**的CPU，而**不是M1/M2或者更新系列的芯片**。然后在继续进行按照本部分部署。
 :::
 
 ## 确认CPU架构
-通常来说，如果您的mac电脑是Intel系列芯片的CPU，请前往[macOS-Intel部署](./2-macOS-Intel部署.mdx)，反之如果您的mac电脑是2020之后的购买的，且是M系列芯片的，您可以继续阅读本部分内容。
+通常来说，如果您的mac电脑是M1、M2系列芯片的CPU，请前往[macOS-Arm64部署](./3-macOS-Arm64部署.mdx)，反之如果您的mac电脑是2020之前的购买的，则应该是x86_64的，您可以继续阅读本部分内容。
 
-如果您仍然不放心，您可以打开macOS 终端输入`arch`，如果显示的是`arm64`，那么您才可以继续阅读本教程。
+如果您仍然不放心，您可以打开macOS 终端输入`arch`，如果显示的是`x86_64`，那么您才可以继续阅读本教程。
 ```shell title="macOS 终端"
 mac-user@mac-studio:~$ arch
-arm64
+x86_64
 ```
 
 ## 安装docker
-请打开链接，[Docker desktop for Mac](https://docs.docker.com/desktop/install/mac-install/)，并选择下载项：**mac with Apple silicon**，下载完成后按照正常的流程安装即可。
+请打开链接，[Docker desktop for Mac](https://docs.docker.com/desktop/install/mac-install/)，并选择下载项：**mac with Intel chip**
 ![docker网站截图](./assets/docker-mac-download.jpeg)
 
-安装完成后，请打开MacOS的终端（快捷键Command+空格，然后文字输入终端也可以打开），然后输入`docker -v`并回车，如果您可以看到输出的版本号（并不需要完全一致），说明安装完成。
-```shell title="macOS 终端"
-# 输入docker -v 检查docker是否安装完成
-user@Mac-Studio ~ % docker -v
-Docker version 20.10.22, build 3a2c30b
-# 当然你也可以再输入docker-compose -v，检查docker-compose是否安装完成
-user@Mac-Studio ~ % docker -v
-Docker Compose version v2.15.1
-```
+
 
 ## 安装Git
 您可以打开MacOS的终端（快捷键Command+空格，然后文字输入终端也可以打开），然后输入`git`并回车，如果您之前没有安装过Xcode或者开发人员工具，此时系统会有提示框建议你下载。或者您也可以直接到AppStore下载Xcode即可。
@@ -45,6 +37,7 @@ usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
            [--super-prefix=<path>] [--config-env=<name>=<envvar>]
            <command> [<args>]
 ```
+
 
 ## 下载Overleaf工具箱
 
@@ -92,6 +85,7 @@ user@Mac-Studio ~ % pwd
 </Tabs>
 ```
 
+
 ## 切换到工具箱目录
 :::tip 友情提示
 在这一步我们要把我们的终端的工作目录，切换到我们刚刚下载的工具箱文件夹下面。请选择和您刚刚下载Overleaf工具箱一致的方法。
@@ -133,70 +127,6 @@ user@Mac-Studio overleaf-toolkit %
 </Tabs>
 ```
 
-## 修改镜像源为Arm64的镜像
-由于你的mac是Arm架构的CPU，官方尚未发布Arm的镜像，但是给出了自行构建的方法，我这里已经构建了最新的镜像，上传到了[DockerHub](https://hub.docker.com/repository/docker/musicminion/sharelatex_arm64/general)：如果你感兴趣的话可以前往查看。
-
-现在请在访达中打开你刚刚下载的overleaf工具箱文件夹，找到 `lib/docker-compose.base.yml` 用任何一个文本编辑器打开，然后做下面的修改。（当然如果你担心之后会有更新版本的Overleaf发布，你想要获取更新，同样请前往[DockerHub](https://hub.docker.com/repository/docker/musicminion/sharelatex_arm64/general)检查最新的版本，并讲下面3.4的版本做出对应的修改。）
-
-```mdx-code-block
-<Tabs>
-<TabItem value="修改前的lib/docker-compose.base.yml">
-```
-```yaml
----
-version: '2.2'
-services:
-
-    sharelatex:
-        restart: always
-        image: "${IMAGE}"
-        container_name: sharelatex
-        volumes:
-            - "${SHARELATEX_DATA_PATH}:/var/lib/sharelatex"
-        ports:
-            - "${SHARELATEX_LISTEN_IP:-127.0.0.1}:${SHARELATEX_PORT:-80}:80"
-        environment:
-          SHARELATEX_MONGO_URL: "${MONGO_URL}"
-          SHARELATEX_REDIS_HOST: "${REDIS_HOST}"
-          REDIS_HOST: "${REDIS_HOST}"
-        env_file: ../config/variables.env
-```
-
-
-```mdx-code-block
-</TabItem>
-<TabItem value="修改后的lib/docker-compose.base.yml">
-```
-```yaml
----
-version: '2.2'
-services:
-
-    sharelatex:
-        restart: always
-        # highlight-start
-        image: "musicminon/sharelatex:3.4"
-        # highlight-end
-        container_name: sharelatex
-        volumes:
-            - "${SHARELATEX_DATA_PATH}:/var/lib/sharelatex"
-        ports:
-            - "${SHARELATEX_LISTEN_IP:-127.0.0.1}:${SHARELATEX_PORT:-80}:80"
-        environment:
-          SHARELATEX_MONGO_URL: "${MONGO_URL}"
-          SHARELATEX_REDIS_HOST: "${REDIS_HOST}"
-          REDIS_HOST: "${REDIS_HOST}"
-        env_file: ../config/variables.env
-```
-
-```mdx-code-block
-</TabItem>
-</Tabs>
-```
-
-:::info
-如果你不想使用我构建的镜像，你想要自己构建镜像，请参考本章节的：[构建自己的镜像](./7-构建自己的镜像.md)，该教程会引导你从头开始，从源代码构建相关的镜像。
-:::
 
 ## 初始化配置文件
 在《切换到工具箱目录》这一部分我们打开的终端中，输入 `sudo bin/init` 然后回车。系统会提示你输入管理员密码，这个密码就是你登陆Mac的密码(**不是AppleID密码**)，在输入过程中终端**不会有任何提示**，输入完成后自行回车即可。效果如下图
@@ -215,6 +145,8 @@ user@Mac-Studio overleaf-toolkit % mkdir data/sharelatex
 user@Mac-Studio overleaf-toolkit % mkdir data/mongo
 user@Mac-Studio overleaf-toolkit % mkdir data/redis
 ```
+
+
 
 ## 编辑配置文件
 接下来请打开你的Overleaf-Tool工具箱文件夹下面 `config/overleaf.rc`，按照下面所示的修改（你可以选择你喜欢的文本编辑器工具，无论是命令行工具还是系统自带的编辑器）：
@@ -410,7 +342,7 @@ SHARELATEX_SITE_LANGUAGE=zh-CN
 
 # highlight-start
 # 这个是配置环境变量，关系到你之后 Xelatex 编译器能不能正常使用的
-PATH=/usr/local/texlive/2022/bin/aarch64-linux:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PATH=/usr/local/texlive/2022/bin/x86_64-linux:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 # highlight-end
 
 ENABLED_LINKED_FILE_TYPES=project_file,project_output_file
@@ -519,7 +451,7 @@ user@Mac-Studio ~ % echo $PATH
 此时不要着急，再在浏览器地址栏中输入 `localhost:3000/launchpad`  然后回车，你应该可以看到初始化管理员账号页面
 ![初始化页面](./assets/launchpad.png)
 
-现在输入你的用户名和密码（密码尽可能复杂一点，简单的密码可能会被拒绝），然后确认时候再回到登陆页面，完成登陆即可。到此为止，我们的部署操作基本结束。（注意：为了安全起见，Overleaf一旦管理员页面注册成功后，再访问ip:port/launchpad就会直接跳转到登录页面）
+现在输入你的用户名和密码（密码尽可能复杂一点，简单的密码可能会被拒绝），然后确认时候再回到登陆页面，完成登陆即可。到此为止，我们的部署操作基本结束。（注意：为了安全起见，Overleaf一旦管理员页面注册成功后，再访问launchpad就会直接跳转到登录页面）
 
 ## 基本运维
 显然，你可能希望自己能够控制自己的Overleaf什么时候启动，什么时候关闭，而不是一直在电脑后台运行。那么，这时候又要回到Overleaf-tool的工具箱文件夹了。
