@@ -9,7 +9,7 @@ const config = {
   title: 'Overleaf搭建教程',
   tagline: '一个 Overleaf 的非官方中文百科',
   url: 'https://musicminion.github.io',
-  baseUrl: '/overleaf-doc/',
+  baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
