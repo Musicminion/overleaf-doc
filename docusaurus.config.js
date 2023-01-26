@@ -72,9 +72,9 @@ const config = {
           {
             type: 'doc',
             to:'/latexTutorial',
-            docId: 'latexTutorial/intro',
+            docId: 'latexTutorial/home',
             position: 'left',
-            label: 'Latex教程',
+            label: 'Overleaf使用教程',
           },
           // {to: '/blog', label: '博客', position: 'left'},
           {
@@ -96,7 +96,7 @@ const config = {
               },
               {
                 label: 'Latex教程',
-                to: '/docs/latexTutorial/intro',
+                to: '/docs/latexTutorial/home',
               },
             ],
           },
