@@ -9,6 +9,10 @@ import TabItem from '@theme/TabItem';
 「macOS-Intel部署」适用于x86_64的Intel Mac。在运行macOS的macbook、macMini、iMac、Mac Studio、Mac Pro等上部署。请在部署前确认您的macOS的CPU为**Intel**的CPU，而**不是M1/M2或者更新系列的芯片**。然后在继续进行按照本部分部署。
 :::
 
+:::info 说明
+部署完成后，**您并不能直接使用Xelatex编译器，也不能编译任何中文的Latex文档。**您需要参考个人级部署的第五节：[安装TexLive宏包](5-TexLive宏包的安装.md)，配置完成后你才可以使用中文Latex，或者在你的tex文档中使用各种宏。
+:::
+
 ## 确认CPU架构
 通常来说，如果您的mac电脑是M1、M2系列芯片的CPU，请前往[macOS-Arm64部署](./3-macOS-Arm64部署.mdx)，反之如果您的mac电脑是2020之前的购买的，则应该是x86_64的，您可以继续阅读本部分内容。
 
